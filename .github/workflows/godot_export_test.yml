@@ -1,0 +1,37 @@
+name: godot_test_export
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on pull request event but only for the Master branch
+  pull_request:
+    branches: [Develop, Master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  export_game:
+    runs-on : ubuntu-latest
+    name    : Automatic Game Export Job
+    steps   :
+      - name : Checkout
+        uses : actions/checkout@v2.3.1
+        with :
+          fetch-depth : 0
+        
+      - name : export game test
+        uses : firebelley/godot-export@v3.0.0
+        with :
+          # Defining all the required inputs
+          godot_executable_download_url       : https://downloads.tuxfamily.org/godotengine/3.4.1/Godot_v3.4.1-stable_linux_headless.64.zip
+          godot_export_templates_download_url : https://downloads.tuxfamily.org/godotengine/3.4.1/Godot_v3.4.1-stable_export_templates.tpz
+          relative_project_path               : ./
+          archive_export_output               : false
+          create_release                      : false
+          generate_release_notes              : false
+          use_preset_export_path              : false
+          #Set export_debug : true for test branches only
+          export_debug                        : false
+        env :
+          GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
